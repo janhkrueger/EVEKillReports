@@ -1,0 +1,4 @@
+# Currently used cronjobs to collect the Crestdumps
+1  11,23 * * * cd /var/games/KillReporter/crest/; /var/games/KillReporter/crest/getCrestHashesToday.sh > /dev/null 2>&1
+17 4 * * * cd /var/games/KillReporter/crest/; /var/games/KillReporter/crest/getCrestHashesYesterday.sh > /dev/null 2>&1
+27 4 * * * cd /var/games/KillReporter/crest/; /var/games/KillReporter/crest/getCrestHashes7DaysBefore.sh > /dev/null 2>&1
