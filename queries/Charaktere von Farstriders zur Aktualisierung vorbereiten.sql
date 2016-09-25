@@ -1,0 +1,1 @@
+INSERT INTO KR_characterUpdatesPrio SELECT characterID FROM CharacterFarstriders;
