@@ -55,3 +55,14 @@ Sample data the API returns:
   "LastDayCompletedContractTotal": "257"
 }
 ```
+
+=============
+### characters
+Updates to current corporation of a character.
+
+Usage:
+- create tables with createKR_characterTables.sql
+- chmod +x addCharIDsToWatch.sh
+- chmod +x getChar.py
+- start addCharIDsToWatch.sh Warning, depending on the database size could this initial run take a little time.
+- start getChar.py as cronjob. This job looks which characters have not updated in the last 30 days and then starts collecting new data via crest from the CCP servers
