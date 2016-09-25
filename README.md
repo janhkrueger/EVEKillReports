@@ -66,3 +66,7 @@ Usage:
 - chmod +x getChar.py
 - start addCharIDsToWatch.sh Warning, depending on the database size could this initial run take a little time.
 - start getChar.py as cronjob. This job looks which characters have not updated in the last 30 days and then starts collecting new data via crest from the CCP servers
+
+=============
+### queries
+Collection of queries I run now and then against the database
