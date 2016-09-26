@@ -26,6 +26,8 @@ Now the crest dump of the currect day will be fetched, gzipped, unpacked, stored
 
 I created getCrestHashes7DaysBefore.sh so I can get a week old dump just if there are kills who are reported later to zKillBoard. getCrestHashesYesterday.sh are for, well, the dumps from yesterday. I call this a 4 am every day before I start creating graphs and other stuff to make sure I have the kills from the previous day.
 
+Fully collected years are exported and stored ni their json format at google drive: https://drive.google.com/open?id=0Bwil0sr_nWxbeGhHaENUY25keDg, so feel free and grab them.
+
 =============
 ### frogs
 Reads the current queue status of Red Frog Freight from their public API: http://api.red-frog.org/queue.json.php
