@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS KR_participants;
 CREATE TABLE KR_participants (
   killID int(32) NOT NULL,
   solarSystemID int(16) NOT NULL,
@@ -12,11 +13,8 @@ CREATE TABLE KR_participants (
   allianceID int(16) NOT NULL DEFAULT '0',
   allianceName text COLLATE utf8mb4_unicode_ci,
   factionID int(16) NOT NULL DEFAULT '0',
-  factionName text COLLATE utf8mb4_unicode_ci,
   finalBlow tinyint(1) DEFAULT NULL,
   weaponTypeID int(8) DEFAULT NULL,
-  points int(8) DEFAULT NULL,
-  totalValue decimal(16,2) DEFAULT NULL,
   PRIMARY KEY (killID,characterID,shipTypeID,damage,kill_time,corporationID),
   KEY idxIsVictim (isVictim),
   KEY idxFinalBlow (finalBlow),
@@ -37,4 +35,4 @@ CREATE TABLE KR_participants (
  PARTITION p2016 VALUES LESS THAN (2017) ENGINE = InnoDB,
  PARTITION p2017 VALUES LESS THAN (2018) ENGINE = InnoDB,
  PARTITION p2018 VALUES LESS THAN (2019) ENGINE = InnoDB,
- PARTITION p2019 VALUES LESS THAN (2020) ENGINE = InnoDB) */
+ PARTITION p2019 VALUES LESS THAN (2020) ENGINE = InnoDB) */;
