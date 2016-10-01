@@ -16,7 +16,7 @@ import requests
 workKillID = sys.argv[1]
 
 conf = ConfigParser.ConfigParser()
-conf.read(["init.ini", "init_local.ini"])
+conf.read(["/var/games/KillReporter/init.ini", "init_local.ini"])
 
 loadcursor = None
 loaddb = None
@@ -36,10 +36,10 @@ def getData(url):
 	request_headers = {
 		"Accept":"application/json",
 		"Accept-Encoding":conf.get("GLOBALS","loadencoding"),
-		"Maintainer":"",
+		"Maintainer":"Achanjati",
 		"Mail":conf.get("GLOBALS","mail"),
-		"Twitter":"",
-		"User-Agent":"loadKillMails - Init"
+		"Twitter":"@janhkrueger",
+		"User-Agent":"RASI loadKillMails - Init"
 	}
 
 	try:
@@ -59,13 +59,11 @@ def getData(url):
 def main():
 	loaddb_init()
 	conf = ConfigParser.ConfigParser()
-	conf.read(["init.ini", "init_local.ini"])
+	conf.read(["/var/games/KillReporter/init.ini", "init_local.ini"])
 
 	jetzt =  str(datetime.now())
 
-	# sql = "SELECT * FROM KR_participantsHash WHERE collected = 0 AND crestHash IS NOT NULL ORDER BY killID DESC;"
 	sql = "SELECT * FROM KR_participantsHash WHERE killID = %s;"
-	# sql = "SELECT 18172011 as killID, 'c3c736166f53a9113be7cdd81289adb6c5cf750e' as crestHash FROM KR_Jobs;"
 	worksql = sql % (workKillID)
 	loadcursor.execute( worksql )
 	
@@ -152,17 +150,22 @@ def main():
 				if 'alliance'  in data['victim']:
 					allianceID = data['victim']['alliance']['id']
 					allianceName = data['victim']['alliance']['name'].replace("'",'\'\'').encode('utf-8')
+				        # Victim Allianz in Tabelle hinterlegen
+                                        sql = "INSERT INTO KR_alliance (allianceID, allianceName) VALUES ({0}, '{1}') ON DUPLICATE KEY UPDATE allianceID={0} ".format(allianceID, allianceName)
+				        loadcursor.execute(sql)
+				        loaddb.commit()
 				else:
 					allianceID = 0
 					allianceName = 'NULL'	
 
 				factionID = 0
-				factionName = 'NULL'
 
 				# Now build the query for the victim
-				query = "INSERT INTO KR_participants (killID, solarSystemID, kill_time, isVictim, shipTypeID, damage, characterID, characterName, corporationID, corporationName, allianceID, allianceName, factionID, factionName, finalBlow, weaponTypeID) VALUES ({0}, {1}, '{2}', {3}, {4}, {5}, {6}, '{7}', {8}, '{9}', {10}, '{11}', {12}, '{13}', {14}, {15}) ON DUPLICATE KEY UPDATE killid={0}, characterID={6} ".format(killid, solarSystem, killTime, 1, shipType, damageTaken, characterID, characterName, corporationID, corporationName, allianceID, allianceName, factionID, factionName,'NULL', 'NULL' )
+				query = "INSERT INTO KR_participants (killID, solarSystemID, kill_time, isVictim, shipTypeID, damage, characterID, characterName, corporationID, corporationName, allianceID, allianceName, factionID,  finalBlow, weaponTypeID) VALUES ({0}, {1}, '{2}', {3}, {4}, {5}, {6}, '{7}', {8}, '{9}', {10}, '{11}', {12}, {13}, {14}) ON DUPLICATE KEY UPDATE killid={0}, characterID={6} ".format(killid, solarSystem, killTime, 1, shipType, damageTaken, characterID, characterName, corporationID, corporationName, allianceID, allianceName, factionID, 'NULL', 'NULL' )
 		    	        loadcursor.execute(query) 
 				loaddb.commit()
+
+
 
 
 				# Nun alle Angreifer iterieren
@@ -184,6 +187,11 @@ def main():
 		                	if 'alliance'  in att:
 	       		                 	allianceID = att['alliance']['id']
 	               		         	allianceName = att['alliance']['name'].replace("'",'\'\'').encode('utf-8')
+						# Allianz in Tabelle hinterlegen
+                                        	sql = "INSERT INTO KR_alliance (allianceID, allianceName) VALUES ({0}, '{1}') ON DUPLICATE KEY UPDATE allianceID={0} ".format(allianceID, allianceName)
+						loadcursor.execute(sql)
+						loaddb.commit()
+
 	     		           	else:
         	       		      		allianceID = 0
 	                       		 	allianceName = 'NULL'			
@@ -205,13 +213,15 @@ def main():
 						attWeaponTypeID = 'NULL'
 					# print killid			
 					# print killid, solarSystem, killTime, 0, attShipType, attdamageDone, attcharacterID, attcharacterName, corporationID, corporationName, allianceID, allianceName, finalBlow, attWeaponTypeID, 'NULL', 'NULL'
-					query = "INSERT INTO KR_participants (killID, solarSystemID, kill_time, isVictim, shipTypeID, damage, characterID, characterName, corporationID, corporationName, allianceID, allianceName, factionID, factionName, finalBlow, weaponTypeID) VALUES ({0}, {1}, '{2}', {3}, {4}, {5}, {6}, '{7}', {8}, '{9}', {10}, '{11}', {12}, '{13}', {14}, {15}) ON DUPLICATE KEY UPDATE killid={0}, characterID={6} ".format(killid, solarSystem, killTime, 0, attShipType, attdamageDone, attcharacterID, attcharacterName, corporationID, corporationName, allianceID, allianceName, factionID, factionName,finalBlow, attWeaponTypeID )
+					query = "INSERT INTO KR_participants (killID, solarSystemID, kill_time, isVictim, shipTypeID, damage, characterID, characterName, corporationID, corporationName, allianceID, allianceName, factionID, finalBlow, weaponTypeID) VALUES ({0}, {1}, '{2}', {3}, {4}, {5}, {6}, '{7}', {8}, '{9}', {10}, '{11}', {12}, '{13}', {14}) ON DUPLICATE KEY UPDATE killid={0}, characterID={6} ".format(killid, solarSystem, killTime, 0, attShipType, attdamageDone, attcharacterID, attcharacterName, corporationID, corporationName, allianceID, allianceName, factionID,finalBlow, attWeaponTypeID )
 	                		loadcursor.execute(query) 
 					loaddb.commit()
-	
+
+					# Kill als bereits eingelesen markieren
 					sql = "UPDATE KR_participantsHash SET collected = 1 WHERE killID={0} AND crestHash='{1}'".format(killid, cresthash)
 					loadcursor.execute(sql)
 					loaddb.commit()
+
 					lastKillID=killid
 			#else:
 				# print "FEHLER"
