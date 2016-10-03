@@ -28,6 +28,9 @@ I created getCrestHashes7DaysBefore.sh so I can get a week old dump just if ther
 
 Fully collected years are exported and stored ni their json format at google drive: https://drive.google.com/open?id=0Bwil0sr_nWxbeGhHaENUY25keDg, so feel free and grab them.
 
+To decompress, the skript /crest/decompressCrestFiles.sh can be used.
+Googles brotli algo has to be installed.
+
 =============
 ### frogs
 Reads the current queue status of Red Frog Freight from their public API: http://api.red-frog.org/queue.json.php
