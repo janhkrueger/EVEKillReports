@@ -14,7 +14,7 @@ import requests
 
 
 conf = ConfigParser.ConfigParser()
-conf.read(["init.ini"])
+conf.read(["/var/games/KillReporter/init.ini"])
 
 cursor = None
 db = None
@@ -37,10 +37,10 @@ def getData(url):
 	request_headers = {
 		"Accept":"application/json",
 		"Accept-Encoding":conf.get("GLOBALS","loadencoding"),
-		"Maintainer":"",
+		"Maintainer":"Achanjati",
 		"Mail":conf.get("GLOBALS","mail"),
-		"Twitter":"",
-		"User-Agent":"loadKillMails"
+		"Twitter":"@janhkrueger",
+		"User-Agent":"RASI loadKillMails"
 	}
 
 	try:
@@ -60,7 +60,7 @@ def getData(url):
 def main():
 	db_init()
 	conf = ConfigParser.ConfigParser()
-	conf.read(["init.ini", "init_local.ini"])
+	conf.read(["/var/games/KillReporter/init.ini", "init_local.ini"])
 	jetzt =  str(datetime.now())
 
 	sql = "SELECT killID FROM KR_participantsHash WHERE killID= %s;"

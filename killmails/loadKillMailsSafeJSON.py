@@ -6,6 +6,8 @@ import urllib2
 import MySQLdb
 import ConfigParser
 import codecs
+import time
+import StringIO
 from datetime import datetime
 from elementtree.ElementTree import parse
 from pprint import pprint
@@ -14,7 +16,7 @@ import requests
 
 
 conf = ConfigParser.ConfigParser()
-conf.read(["/var/games/KillReporter/init.ini"])
+conf.read(["/var/games/KillReporter/init.ini", "init_local.ini"])
 
 cursor = None
 db = None
@@ -37,7 +39,7 @@ def getData(url):
 		"Maintainer":"Achanjati",
 		"Mail":conf.get("GLOBALS","mail"),
 		"Twitter":"@janhkrueger",
-		"User-Agent":"RASI loadKillMails"
+		"User-Agent":"RASI loadKillMails - Init"
 	}
 
 	try:
@@ -58,22 +60,24 @@ def main():
 	db_init()
 	conf = ConfigParser.ConfigParser()
 	conf.read(["/var/games/KillReporter/init.ini", "init_local.ini"])
+
 	jetzt =  str(datetime.now())
 
-	sql = "SELECT killID FROM KR_participantsHash WHERE (collected NOT IN (0,1,15) OR crestHash IS NULL) ORDER BY killID DESC LIMIT 2000;"
+	sql = "SELECT * FROM KR_participantsHash WHERE collected = 0 AND crestHash IS NOT NULL ORDER BY killID DESC LIMIT 0,1000;"
 	cursor.execute( sql)
 	
-        killmailurl = conf.get("ZKBSINGLE","base_query")
+        killmailurl = conf.get("LOADKILLMAIL","killmail")
 
 	rows = cursor.fetchall()
+	lastKillID=0
         for kill in rows:
-		crest = 0
 		# fehler = 99	
 		killid = kill[0]
-                #print (killid)
+		#print killid
+		cresthash = kill[1]
 
 		# Zusammenbauen der URL der KillMail
-		killmailurldetail = killmailurl % (killid)
+		killmailurldetail = killmailurl % (killid, cresthash)
 		# Abfragen des Krieges
 		try:
 			data = getData(killmailurldetail)
@@ -81,42 +85,41 @@ def main():
 			if data == "HTTP ERROR":
 				raise ValueError('A very specific bad thing happened')
 		except IOError:
-			print " >>> IOError bei KillMail %s, beende Verarbeitung." % killid
+			#print " >>> IOError bei KillMail %s, beende Verarbeitung." % killid
 			sql = "UPDATE KR_participantsHash SET collected = 8 WHERE killID={0} AND crestHash='{1}'".format(killid, cresthash)
                 	cursor.execute(sql)
                 	db.commit()
 			fehler = 8
+			#sys.exit(8)
 		except ValueError as err:
 			fehler = 3
-			print " >>> Hash moeglicherweise falsch?  %s" % killid
+			# print " >>> Hash moeglicherweise falsch?  %s" % killid
+			# 3 = konnte killMail nicht vom Server laden
+			sql = "UPDATE KR_participantsHash SET collected = 3 WHERE killID={0}".format(killid)
+                	cursor.execute(sql)
+                	db.commit()
+			#sys.exit(3)
 		except:
-        		print " >>> Fehler beim Lesen der KillMail %s" % killid
+        		# print " >>> Fehler beim Lesen der KillMail %s" % killid
+			sql = "UPDATE KR_participantsHash SET collected = 4 WHERE killID={0} AND crestHash='{1}'".format(killid, cresthash)
+                	cursor.execute(sql)
+                	db.commit()
+			fehler = 4
+			#sys.exit(4)
 
 		# print killid, lastKillID
-		if (fehler == 0):
-
+        	#parsed   = json.loads(data,encoding='utf-8')
+        	# Hier jetzt in eine Datei umleiten
+		#print (data)
+        	filename = 'killjson/%s.json' % killid
+        	with open( filename, 'w' ) as outfile:
+           		json.dump(data, outfile)
+           		#outfile.write(data)
 			# print killid
-
-			try:
-				crest = ( data[0]['zkb']['hash'] )
-				sql = "UPDATE KR_participantsHash SET collected = 0, crestHash='{1}' WHERE killID={0}".format(killid, crest)
-                		cursor.execute(sql)
-                		db.commit()
-			except (ValueError,IndexError):
-				# print (killid)
-				# print ("Fehler bei Kill: %s", killid)
-				# 9 = kein Eintrag von zKillBoard gefundenn
-                		#sql = "INSERT INTO KR_participantsHashSave VALUES (%s)" % killid
-				#cursor.execute(sql)
-                		#db.commit()
-				sql = "DELETE FROM KR_participantsHash WHERE killID=%s" % killid
-				cursor.execute(sql)
-                		db.commit()
-				sql = "DELETE FROM KR_participants WHERE killID=%s" % killid
-				cursor.execute(sql)
-                		db.commit()
-				pass
-
+			sql = "UPDATE KR_participantsHash SET collected = 15 WHERE killID={0} AND crestHash='{1}'".format(killid, cresthash)
+			cursor.execute(sql)
+			db.commit()
+		fehler = 99
 
 	cursor.close()
 	db.close()
