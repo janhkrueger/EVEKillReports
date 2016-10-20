@@ -3,7 +3,7 @@ echo "##################"
 echo "#      Begin     #"
 echo "##################"
 
-# MySQL Variablen bereitstellen
+# MySQL credentials from ~/.my.cnf
 dbname=
 limit=50000000
 
