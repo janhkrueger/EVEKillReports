@@ -15,6 +15,7 @@ $sth->execute();
 $anzahl = $sth->fetch(PDO::FETCH_ASSOC);
 $anzahl =  $anzahl['anzahl'];
 
+# set credentials and tokens
 \Codebird\Codebird::setConsumerKey("", "");
 $cb = \Codebird\Codebird::getInstance();
 $cb->setToken("", "");
