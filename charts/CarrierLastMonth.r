@@ -132,4 +132,4 @@ p <- ggplot() +
 print (p)
 
 # Now save the plot to a file
-ggsave(filename="EVEData/charts/CarrierLastMonth.png", plot=p,width=8, height=4, dpi=100)
+ggsave(filename="/var/games/KillReporter/EVEData/charts/CarrierLastMonth.png", plot=p,width=8, height=4, dpi=100)

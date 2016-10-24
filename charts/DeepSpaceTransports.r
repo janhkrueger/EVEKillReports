@@ -103,5 +103,5 @@ p <- ggplot() +
 print (p)
 
 # Now save the plot to a file
-dateiname = paste("EVEData/charts/","DeepSpaceTransports_",runyear,".png",sep="")
+dateiname = paste("/var/games/KillReporter/EVEData/charts/","DeepSpaceTransports_",runyear,".png",sep="")
 ggsave(filename=dateiname, plot=p,width=8, height=4, dpi=100)

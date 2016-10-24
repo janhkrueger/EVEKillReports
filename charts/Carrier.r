@@ -111,7 +111,6 @@ dat23911 <- data.frame(
 )
 
 
-cols <- c("Nidhoggur"="#8C5055","Chimera"="#8A8F9A","Archon"="#BBA183","Thanatos"="#9EAE95")
 cols <- c("Nidhoggur"="red","Chimera"="steelblue2","Archon"="orange","Thanatos"="aquamarine4")
 
 graphtitle = paste("Carrier ",runyear,sep="")
@@ -133,5 +132,5 @@ p <- ggplot() +
 print (p)
 
 # Now save the plot to a file
-dateiname = paste("EVEData/charts/","Carrier_",runyear,".png",sep="")
+dateiname = paste("/var/games/KillReporter/EVEData/charts/","Carrier_",runyear,".png",sep="")
 ggsave(filename=dateiname, plot=p,width=8, height=4, dpi=100)

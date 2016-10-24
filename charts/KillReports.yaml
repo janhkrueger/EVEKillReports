@@ -3,4 +3,4 @@ db:
  name : 
  user : 
  pass : 
- outpath: /EVEData/charts/
+ outpath: /var/games/KillReporter/EVEData/charts/

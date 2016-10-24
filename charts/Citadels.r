@@ -85,7 +85,7 @@ p <- ggplot() +
   ggtitle(graphtitle) + 
   geom_line(data=dat35832, aes(x = datum, y = anzahl, colour="Astrahus") ) + geom_point(data=dat35832, aes(x = datum, y = anzahl), size=1 ) +
   geom_line(data=dat35833, aes(x = datum, y = anzahl, colour="Fortizar") ) + geom_point(data=dat35833, aes(x = datum, y = anzahl), size=1 ) + 
-#  geom_line(data=dat35834, aes(x = datum, y = anzahl, colour="Keepstar") ) + geom_point(data=dat35834, aes(x = datum, y = anzahl), size=1 ) + 
+  geom_line(data=dat35834, aes(x = datum, y = anzahl, colour="Keepstar") ) + geom_point(data=dat35834, aes(x = datum, y = anzahl), size=1 ) + 
   # Setting the labels
   xlab("Week") +
   ylab("Losses") +
@@ -96,5 +96,5 @@ p <- ggplot() +
 print (p)
 
 # Now save the plot to a file
-dateiname = paste("EVEData/charts/","Citadels_",runyear,".png",sep="")
+dateiname = paste("/var/games/KillReporter/EVEData/charts/","Citadels_",runyear,".png",sep="")
 ggsave(filename=dateiname, plot=p,width=8, height=4, dpi=100)
