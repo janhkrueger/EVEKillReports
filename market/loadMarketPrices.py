@@ -1,7 +1,6 @@
 #!/usr/bin/env python2.7
 # encoding: utf-8
 
-
 import sys, gzip, StringIO, sys, math, os, getopt, time, json, socket
 import urllib2
 import ConfigParser
@@ -19,7 +18,7 @@ import psycopg2
 import psycopg2.extensions
 
 conf = ConfigParser.ConfigParser()
-conf.read(["init.ini", "init_local.ini"])
+conf.read(["/var/games/KillReporter/init.ini", "init_local.ini"])
 
 cursor = None
 db = None
@@ -32,17 +31,17 @@ def db_init():
 	db_port = int(conf.get("GLOBALSPSQL","edb_port"))
 
 	global cursor,db
-        db = psycopg2.connect(database = "",host=db_IP, user="", password="")
+        db = psycopg2.connect(database = "[DATABASE]",host=db_IP, user="[USERNAME]", password="[PASSWORD]")
 	cursor = db.cursor()
 
 def getData(url):
 	request_headers = {
 		"Accept":"application/json",
 		"Accept-Encoding":conf.get("GLOBALS","loadencoding"),
-		"Maintainer":"",
+		"Maintainer":"Achanjati",
 		"Mail":conf.get("GLOBALS","mail"),
-		"Twitter":"",
-		"User-Agent":"UpdateMarketPrices"
+		"Twitter":"@janhkrueger",
+		"User-Agent":"RASI UpdateMarketPrices"
 	}
 
         request = urllib2.Request(url, headers=request_headers)
@@ -57,7 +56,7 @@ def getData(url):
 def main():
 	db_init()
 	conf = ConfigParser.ConfigParser()
-	conf.read(["init.ini", "init_local.ini"])
+	conf.read(["/var/games/KillReporter/init.ini", "init_local.ini"])
 
 	marketurl = "https://crest-tq.eveonline.com/market/prices/"
 	# Abfragen des Krieges
@@ -81,7 +80,7 @@ def main():
 			averagePrice = 0.0
 		typeID = item['type']['id']
 		# now put it into the database
-		sql = "INSERT INTO \"universe\".\"crestMarketPrices\" (\"typeID\", \"adjustedPrice\", \"averagePrice\", \"surveyDate\") VALUES ({0}, {1}, {2}, '{3}' )".format(typeID, adjustedPrice, averagePrice, jetzt )
+		sql = "INSERT INTO universe.crestmarketprices (typeID, adjustedPrice, averagePrice, surveyDate) VALUES ({0}, {1}, {2}, '{3}' )".format(typeID, adjustedPrice, averagePrice, jetzt )
 		#print sql
 		cursor.execute(sql)
 		db.commit()
