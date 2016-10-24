@@ -17,7 +17,7 @@ from pprint import pprint
 import xml.etree.ElementTree as ET
 
 conf = ConfigParser.ConfigParser()
-conf.read(["init.ini", "init_local.ini"])
+conf.read(["/var/games/KillReporter/init.ini", "init_local.ini"])
 
 cursor = None
 db = None
@@ -37,7 +37,7 @@ def db_init():
 def main():
 	db_init()
 	conf = ConfigParser.ConfigParser()
-	conf.read(["init.ini", "init_local.ini"])
+	conf.read(["/var/games/KillReporter/init.ini", "init_local.ini"])
 
 	db_schema = conf.get("GLOBALS","db_name")
 	db_IP = conf.get("GLOBALS","db_host")

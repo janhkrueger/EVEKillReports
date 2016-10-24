@@ -17,14 +17,14 @@ import xml.etree.ElementTree
 
 def main():
 	conf = ConfigParser.ConfigParser()
-	conf.read(["init.ini", "init_local.ini"])
+	conf.read(["/var/games/KillReporter/init.ini", "init_local.ini"])
 
 	db_schema = conf.get("GLOBALSPSQL","edb_name")
 	db_IP = conf.get("GLOBALSPSQL","edb_host")
 	db_user = conf.get("GLOBALSPSQL","edb_user")
 	db_pw = conf.get("GLOBALSPSQL","edb_pw")
 	db_port = int(conf.get("GLOBALSPSQL","edb_port"))
-	db = psycopg2.connect(database = "",host=db_IP, user="", password="")
+	db = psycopg2.connect(database = "[DATABASE]",host=db_IP, user="[USERNAME]", password="[PASSWORD]")
 	cursor = db.cursor()
 
 
