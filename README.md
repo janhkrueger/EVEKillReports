@@ -75,3 +75,8 @@ Usage:
 =============
 ### queries
 Collection of queries I run now and then against the database
+
+
+=============
+### gdrivesync.sh
+Small script to sync all exported files to the specified folder at Google Drive: https://drive.google.com/drive/folders/0Bwil0sr_nWxbcDRpenN5dTRWeU0?usp=sharing so everybody can easily grab the data and charts.
