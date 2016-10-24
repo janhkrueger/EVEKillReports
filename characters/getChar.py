@@ -14,7 +14,7 @@ from elementtree.ElementTree import parse
 import xml.etree.ElementTree as ET
 
 conf = ConfigParser.ConfigParser()
-conf.read(["init.ini", "init_local.ini"])
+conf.read(["/var/games/KillReporter/init.ini", "init_local.ini"])
 
 cursor = None
 db = None
@@ -37,7 +37,7 @@ def db_init():
 def main():
 	db_init()
 	conf = ConfigParser.ConfigParser()
-	conf.read(["init.ini", "init_local.ini"])
+	conf.read(["/var/games/KillReporter/init.ini", "init_local.ini"])
 
 	db_schema = conf.get("GLOBALS","db_name")
 	db_IP = conf.get("GLOBALS","db_host")
@@ -50,7 +50,7 @@ def main():
 	sql='DELETE FROM KR_characterUpdatesWork'
 	cursor.execute(sql)
 
-	sql='SELECT characterID FROM KR_characterUpdatesPrio ORDER BY characterID ASC limit 0,%s' % (db_maxrequests)
+	sql='SELECT characterID FROM KR_characterUpdatesPrio ORDER BY characterID DESC limit 0,%s' % (db_maxrequests)
 	cursor.execute(sql)
 	# Nun in KR_characterUpdatesWork einfuegen
 	rows = cursor.fetchall()
