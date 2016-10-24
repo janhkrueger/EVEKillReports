@@ -14,9 +14,8 @@ from pprint import pprint
 import xml.etree.ElementTree as ET
 import requests
 
-
 conf = ConfigParser.ConfigParser()
-conf.read(["init.ini", "init_local.ini"])
+conf.read(["/var/games/KillReporter/init.ini", "init_local.ini"])
 
 cursor = None
 db = None
@@ -39,7 +38,7 @@ def getData(url):
 		"Maintainer":"",
 		"Mail":conf.get("GLOBALS","mail"),
 		"Twitter":"",
-		"User-Agent":"RASI load Frog status"
+		"User-Agent":"[USERNAME] load Frog status"
 	}
 
         request = urllib2.Request(url, headers=request_headers)
@@ -54,7 +53,7 @@ def getData(url):
 def main():
 	db_init()
 	conf = ConfigParser.ConfigParser()
-	conf.read(["init.ini", "init_local.ini"])
+	conf.read(["/var/games/KillReporter/init.ini", "init_local.ini"])
 
 	jetzt =  str(datetime.now())
 
