@@ -10,4 +10,3 @@ gunzip $FILENAME
 /var/brotli/tools/bro --quality 10 --input $FILEJSON --output $FILEBRO
 mv -f $FILEBRO data/
 rm $FILEJSON
-/var/games/KillReporter/killmails/killloadKillMailsYoungestSingle.sh

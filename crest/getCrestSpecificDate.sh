@@ -1,5 +1,4 @@
 #! /bin/sh
-# Just insert the date you want to collect the crest hashes
 JETZT=20071204
 FILENAME=$JETZT.json.gz
 FILEJSON=$JETZT.json
