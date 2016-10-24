@@ -1,6 +1,5 @@
 #!/bin/bash
 # loading all cresthashes of a year and then archiving the entire files
-# uses facebooks zStandard algo for compressing
 # JHK, 20161003
 
 for f in 2015/*.json; do
