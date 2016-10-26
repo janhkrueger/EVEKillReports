@@ -23,20 +23,14 @@ def db_init():
   cursor = db.cursor()
 
 def move_file(file):
-  sourcepath = "/var/games/KillReporter/killmails/killjson/"+file
+  sourcepath = "/var/games/KillReporter/killmails/killjson/later/"+file
   destpath = "/var/games/KillReporter/killmails/killjson/imported/"+file
-  try:
-    os.rename(sourcepath, destpath)
-  except Exception:  
-    pass
+  os.rename(sourcepath, destpath)
 
 def move_error(file):
-  sourcepath = "/var/games/KillReporter/killmails/killjson/"+file
+  sourcepath = "/var/games/KillReporter/killmails/killjson/later/"+file
   destpath = "/var/games/KillReporter/killmails/killjson/errors/"+file
-  try:
-    os.rename(sourcepath, destpath)
-  except Exception:  
-    pass
+  os.rename(sourcepath, destpath)
 
 def main():
   global conf
@@ -45,7 +39,7 @@ def main():
   db_init()
 
   # Read all *.txt Files 
-  mypath = '//var//games//KillReporter//killmails//killjson//'
+  mypath = '//var//games//KillReporter//killmails//killjson//later//'
   for file in os.listdir(mypath):
     if file.endswith(".json"):
       killid= os.path.splitext(os.path.basename(file))[0]

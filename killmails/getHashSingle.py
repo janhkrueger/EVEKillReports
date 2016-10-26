@@ -37,10 +37,10 @@ def getData(url):
 	request_headers = {
 		"Accept":"application/json",
 		"Accept-Encoding":conf.get("GLOBALS","loadencoding"),
-		"Maintainer":"Achanjati",
+		"Maintainer":"",
 		"Mail":conf.get("GLOBALS","mail"),
-		"Twitter":"@janhkrueger",
-		"User-Agent":"RASI loadKillMails"
+		"Twitter":"[YOURTWITTERNICK]",
+		"User-Agent":""
 	}
 
 	try:
